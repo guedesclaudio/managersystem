@@ -2,17 +2,9 @@ import styled from "styled-components"
 import SideBar from "../components/SideBar"
 import BodyStyle from "./style"
 import HomeBox from "../components/HomeBox";
-
+import { boxes } from "../data/boxes";
 
 export default function Home() {
-
-    const boxes = [
-        {name: "Produtos", description: "Crie, consulte, exclua e atualize os seus produtos"},
-        {name: "Pedidos", description: "Acompanhe e atualize os seus pedidos"},
-        {name: "Clientes", description: "Adicione, consulte, exclua e atualize clientes"},
-        {name: "Manager System", description: ""},
-    ]
-
     return (
         <Container>
             <BodyStyle/>
@@ -31,6 +23,7 @@ export default function Home() {
 const Container = styled.div`
     display: flex;
     justify-content: left;
+    margin-left: 400px;
 `
 const Boxes = styled.div`
     width: 100vw;
