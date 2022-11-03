@@ -48,7 +48,7 @@ export default function Products() {
             <BodyStyle/>
             <SideBar/>
             <ListContainer>
-                <Link to = {"/create-product"}>
+                <Link to = {"/register-product"}>
                     <Registration>
                         <p>Cadastrar produto</p>
                         <IoAddCircle color = "green" size = {20}/>
@@ -103,7 +103,7 @@ const List = styled.div`
 const ProductContainer = styled.div`
     width: 100%;   
     min-height: 140px;  
-    border: 1px solid white;
+    border: 1px solid #ADD8E6;
     border-radius: 6px;
     padding: 10px;
     background-color: aliceblue;

@@ -36,7 +36,7 @@ export default function SideBar() {
             </LogoTemplate>
             {topics.map((value, index) => <Topic key = {index} classTopic = {value.class} title = {value.title} sub = {value.sub} route = {value.route}/>)}
             <Exit>
-                <FiLogOut color = "orange" size = {30}/>
+                <FiLogOut color = "red" size = {30}/>
             </Exit>
         </Container>
     )
