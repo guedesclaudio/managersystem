@@ -13,7 +13,7 @@ export default function Home() {
                 <WelcomeMessage>Olá, bem vindo <strong>Arte Natu!</strong></WelcomeMessage>
                 <img src = "https://img.freepik.com/vetores-gratis/adesivo-caixa-vazia-aberta-em-fundo-branco_1308-68243.jpg?w=2000"/>
                 <BoxTemplate>
-                    {boxes.map((value, index) => <HomeBox key = {index} name = {value.name} description = {value.description}/>)}
+                    {boxes.map((value, index) => <HomeBox key = {index} name = {value.name} description = {value.description} route = {value.route}/>)}
                 </BoxTemplate>
             </Boxes>
         </Container>

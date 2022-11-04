@@ -8,6 +8,8 @@ import Clients from "../pages/Clients"
 import CreateClient from "../pages/CreateClient"
 import Categories from "../pages/Categories"
 import CreateCategory from "../pages/CreateCategory"
+import Orders from "../pages/Orders"
+import CreateOrder from "../pages/CreateOrder"
 
 export default function App() {
 
@@ -22,8 +24,8 @@ export default function App() {
                     <Route path = "/register-product" element = {<CreateProducts/>}/>
                     <Route path = "/see-clients" element = {<Clients/>}/>
                     <Route path = "/register-client" element = {<CreateClient/>}/>
-                    <Route path = "/see-orders" element = {<Home/>}/>
-                    <Route path = "/register-orders" element = {<Home/>}/>
+                    <Route path = "/see-orders" element = {<Orders/>}/>
+                    <Route path = "/register-order" element = {<CreateOrder/>}/>
                     <Route path = "/see-categories" element = {<Categories/>}/>
                     <Route path = "/register-category" element = {<CreateCategory/>}/>
                 </Routes>

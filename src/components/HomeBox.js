@@ -1,19 +1,22 @@
 import styled from "styled-components"
 import { IoIosRedo } from "react-icons/io";
+import { Link } from "react-router-dom"
 
 
-export default function HomeBox({name, description}) {
+export default function HomeBox({name, description, route}) {
 
     const display = description === "" ? "none" : "initial"
 
     return (
-        <BoxContainer>
-            <div>
-                <Title>{name}</Title>
-                <IoIosRedo size = {24} display = {display}/>
-            </div>
-            <Description>{description}</Description>
-        </BoxContainer>
+        <Link to = {`/${route}`}>
+            <BoxContainer>
+                <div>
+                    <Title>{name}</Title>
+                    <IoIosRedo size = {24} display = {display}/>
+                </div>
+                <Description>{description}</Description>
+            </BoxContainer>
+        </Link>
     )
 }
 

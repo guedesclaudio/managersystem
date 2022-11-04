@@ -31,7 +31,7 @@ export default function SideBar() {
     return (
         <Container>
             <LogoTemplate>
-                <Logo>Manager System</Logo>
+                <Link to = {"/home"}><Logo>Manager System</Logo></Link>
                 <FcOpenedFolder size = {30}/>
             </LogoTemplate>
             {topics.map((value, index) => <Topic key = {index} classTopic = {value.class} title = {value.title} sub = {value.sub} route = {value.route}/>)}
