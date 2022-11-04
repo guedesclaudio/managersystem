@@ -10,11 +10,12 @@ import Categories from "../pages/Categories"
 import CreateCategory from "../pages/CreateCategory"
 import Orders from "../pages/Orders"
 import CreateOrder from "../pages/CreateOrder"
+import {UserStorage} from "../contexts/UserContext.js"
 
 export default function App() {
 
     return (
-        <>
+        <UserStorage>
             <GlobalStyle/>
             <BrowserRouter>
                 <Routes>
@@ -30,6 +31,6 @@ export default function App() {
                     <Route path = "/register-category" element = {<CreateCategory/>}/>
                 </Routes>
             </BrowserRouter>
-        </>
+        </UserStorage>
     )
 }

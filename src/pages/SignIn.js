@@ -1,18 +1,22 @@
 import styled from "styled-components"
 import { ThreeDots  } from "react-loader-spinner"
-import { useState, useNavigate } from "react"
+import { useState, useContext } from "react"
+import { useNavigate } from "react-router-dom"
 import { handleForm } from "../helpers/handleForm"
 import { FcOpenedFolder } from "react-icons/fc"
+import { postLogin } from "../services/api.js"
+import { UserContext } from "../contexts/UserContext"
 
 export default function SignIn() {
-
+    
+    const {userData, setUserData, config, setConfig} = useContext(UserContext)
     const [load, setLoad] = useState("login")
     const [form, setForm] = useState({})
     const [disabled, setDisabled] = useState("")
     const [background, setBackground] = useState("#FFFFFF")
     const [color, setColor] = useState("grey")
     const [alert, setAlert] = useState("")
-    //const navigate = useNavigate()
+    const navigate = useNavigate()
 
 
     function login (event) {
@@ -20,8 +24,35 @@ export default function SignIn() {
         event.preventDefault()
         disabledForm()
         setAlert("")
-        setTimeout(enabledForm, 2000)
-        setTimeout(() => setAlert("login ou senha inválidos"), 2100)
+        setTimeout(sendLogin, 2000)
+    }
+
+    async function sendLogin() {
+        console.log(form)
+        try {
+            const response = await postLogin(form)
+            const {token, username} = response.data
+            
+            localStorage.setItem("user", JSON.stringify({...form, token, username}))
+            setUserData({...userData, token, username})
+            setConfig({...config, 
+                headers: {
+                    "Authorization": `Bearer ${token}`
+            }})
+
+            navigate("/home")
+
+        } catch (error) {
+
+            const status = error.response.status
+            enabledForm()
+
+            if (status === 400 || status === 401) {
+               setAlert("usuário ou senha inválidos")
+                return
+            }
+            //alert("Ops! Tivemos um problema e estamos trabalhando nisso.")
+        }
     }
 
     function disabledForm() {
@@ -42,7 +73,6 @@ export default function SignIn() {
     return (
         <Container>
             <Template>
-                
                 <FcOpenedFolder size = {80}/>
                 <Logo>Manager System</Logo>
             </Template>
