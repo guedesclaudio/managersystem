@@ -4,15 +4,39 @@ import BodyStyle from "./style"
 import { Link } from "react-router-dom"
 import { IoAddCircle } from "react-icons/io5"
 import { useContext, useEffect, useState } from "react"
-import { getCategories } from "../services/api"
+import { deleteCategory, getCategories } from "../services/api"
 import { UserContext } from "../contexts/UserContext"
+import { GrEdit } from "react-icons/gr"
+import { BsTrash } from "react-icons/bs"
 
-function Category({name, numberProducts}) {
+function Category({name, numberProducts, categoryId, setCallApi}) {
+
+    const {config} = useContext(UserContext)
+
+    async function removeCategory() {
+
+        const deleteConfirm = window.confirm(`Tem certeza que deseja excluir ${name}?`)
+
+        try {
+            if (deleteConfirm === true) {
+                await deleteCategory(categoryId, config) 
+                alert(`Categoria ${name} deletado com sucesso!`)
+                setCallApi(true)
+            }
+            return
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
 
     return (
         <CategoryContainer>
             <Name>{name}</Name>
             <Total>Quantidade: <strong>{numberProducts}</strong></Total>
+            <Icons>
+                <GrEdit color = "grey" size = {18} onClick = {() => alert("Atualização de categoria ainda não está implementada")}/>
+                <BsTrash color = "red" size = {18} onClick = {removeCategory}/>
+            </Icons>
         </CategoryContainer>
     )
 }
@@ -21,8 +45,9 @@ export default function Categories() {
 
     const [categoriesData, setCategoriesData] = useState([])
     const {config} = useContext(UserContext)
+    const [callApi, setCallApi] = useState(true)
 
-    useEffect(async () => {
+    const readCategories = async () => {
         try {
             const result =  (await getCategories(config)).data
             setCategoriesData(result)
@@ -30,7 +55,14 @@ export default function Categories() {
         } catch (error) {
             alert(`Ocorreu um erro ${error}`)
         }
-    }, [])
+    }
+
+    useEffect(async () => {
+       if (callApi) {
+        readCategories()
+        setCallApi(false)
+       }
+    }, [callApi])
 
     return (
         <Container>
@@ -43,8 +75,8 @@ export default function Categories() {
                         <IoAddCircle color = "green" size = {20}/>
                     </Registration>
                 </Link>
-                {categoriesData.map((value, index) => <Category key = {index} 
-                name = {value.name} numberProducts = {value.number_products}/>)}
+                {categoriesData.map((value, index) => <Category key = {index} categoryId = {value.id}
+                name = {value.name} numberProducts = {value.number_products} setCallApi = {setCallApi}/>)}
             </List>
         </Container>
     )
@@ -74,9 +106,11 @@ const Name = styled.p`
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
     color: grey;
+    width: 60%;
 `
 const Total = styled(Name)`
     font-size: 18px;
+    width: 30%;
 `
 const Registration = styled.div`
     margin: 60px auto;
@@ -95,4 +129,7 @@ const Registration = styled.div`
     && p:hover {
         filter: brightness(1.5);
     }
+`
+const Icons = styled.div`
+    cursor: pointer;
 `

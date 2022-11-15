@@ -136,7 +136,6 @@ const Box = styled.div`
     }
 
     && button {
-        
         width: 150px;
         height: 40px;
         border-radius: 6px;

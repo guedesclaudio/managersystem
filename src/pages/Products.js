@@ -7,7 +7,8 @@ import { IoAddCircle } from "react-icons/io5"
 import { Link } from "react-router-dom"
 import { UserContext } from "../contexts/UserContext"
 import { useEffect, useState, useContext } from "react"
-import { getProducts, deleteProduct } from "../services/api"
+import { getProducts, deleteProduct, getCategories } from "../services/api"
+import { handleForm } from "../helpers/handleForm"
 
 
 function Product({name, description, price, category, productId, setCallApi}) {
@@ -54,11 +55,18 @@ export default function Products() {
 
     const [callApi, setCallApi] = useState(true)
     const [productsData, setProductsData] = useState([])
+    const [form, setForm] = useState()
+    const [categoriesData, setCategoriesData] = useState([])
     const {config} = useContext(UserContext)
 
-    const readProducts = async () => {
+    function treatEvent(event) {
+        event.preventDefault()
+        readProducts(form)
+    }
+
+    const readProducts = async (form) => {
         try {
-            const result =  (await getProducts(config)).data
+            const result =  (await getProducts(form?.category, config)).data
             setProductsData(result)
             
         } catch (error) {
@@ -72,17 +80,40 @@ export default function Products() {
         }
     }, [callApi])
 
+    useEffect(async () => {
+        try {
+            const result =  (await getCategories(config)).data
+            setCategoriesData(result)
+            
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }, [])
+
     return (
         <Container>
             <BodyStyle/>
             <SideBar/>
             <ListContainer>
-                <Link to = {"/register-product"}>
-                    <Registration>
-                        <p>Cadastrar produto</p>
-                        <IoAddCircle color = "green" size = {20}/>
-                    </Registration>
-                </Link>
+                <Options>
+                    <Link to = {"/register-product"}>
+                        <Registration>
+                            <p>Cadastrar produto</p>
+                            <IoAddCircle color = "green" size = {20}/>
+                        </Registration>
+                    </Link>
+                     <Filter>
+                        <p>Filtar produtos</p>
+                        <form onSubmit={treatEvent}>
+                            <select name = "category" onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}>
+                                <option selected = "selected" value = {"all"} type = "submit">todos</option>
+                                {categoriesData.map((value, index) => <option key = {index} value = {value.id}>
+                                {value.name}</option>)}
+                            </select>
+                            <button type="submit">Filtrar</button>
+                        </form>
+                    </Filter>
+                </Options>
                 <List>
                     {productsData.map((value, index) => <Product key = {index} name = {value.name} productId = {value.id}
                     description = {value.description} price = {value.price} category = {value.category} setCallApi = {setCallApi}/>)}
@@ -123,6 +154,51 @@ const ListContainer = styled.div`
     align-items: center;
     flex-direction: column;
     margin-bottom: 20px;
+`
+const Options = styled.div`
+    width: 50vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    && p {
+        font-family: 'Roboto', sans-serif;
+        font-size: 24px;
+        color: grey;
+    }
+`
+const Filter = styled(Options)`
+    width: 54%;
+
+    && button {
+        margin-left: 10px;
+        width: 150px;
+        height: 40px;
+        border-radius: 6px;
+        border: none;
+        background-color: #ADD8E6;
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        color: grey;
+        cursor: pointer;
+    }
+
+    && button:hover {
+        filter: brightness(0.8);
+    }
+
+    && select {
+        width: 150px;
+        height: 40px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        color: grey;
+        outline: none;
+        padding-left: 10px;
+        background-color: #ADD8E6;
+        border: none;
+        border-radius: 6px;
+    }
 `
 const List = styled.div`
     width: 50vw;
