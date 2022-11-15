@@ -7,12 +7,12 @@ import { useContext, useEffect, useState } from "react"
 import { getCategories } from "../services/api"
 import { UserContext } from "../contexts/UserContext"
 
-function Category({name}) {
+function Category({name, numberProducts}) {
 
     return (
         <CategoryContainer>
             <Name>{name}</Name>
-            <Total>Quantidade: <strong>0</strong></Total>
+            <Total>Quantidade: <strong>{numberProducts}</strong></Total>
         </CategoryContainer>
     )
 }
@@ -28,7 +28,7 @@ export default function Categories() {
             setCategoriesData(result)
             
         } catch (error) {
-            console.error(error)
+            alert(`Ocorreu um erro ${error}`)
         }
     }, [])
 
@@ -44,7 +44,7 @@ export default function Categories() {
                     </Registration>
                 </Link>
                 {categoriesData.map((value, index) => <Category key = {index} 
-                name = {value.name} />)}
+                name = {value.name} numberProducts = {value.number_products}/>)}
             </List>
         </Container>
     )

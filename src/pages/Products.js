@@ -5,23 +5,44 @@ import { BsTrash } from "react-icons/bs"
 import { GrEdit } from "react-icons/gr"
 import { IoAddCircle } from "react-icons/io5"
 import { Link } from "react-router-dom"
+import { UserContext } from "../contexts/UserContext"
+import { useEffect, useState, useContext } from "react"
+import { getProducts, deleteProduct } from "../services/api"
 
 
+function Product({name, description, price, category, productId, setCallApi}) {
 
-function Product({name, description, price, category}) {
+    let priceFormated = price.toString().replace(".", ",")
+    const {config} = useContext(UserContext)
+
+    async function removeProduct() {
+
+        const deleteConfirm = window.confirm(`Tem certeza que deseja excluir ${name}?`)
+
+        try {
+            if (deleteConfirm === true) {
+                await deleteProduct(productId, config) 
+                alert(`Produto ${name} deletado com sucesso!`)
+                setCallApi(true)
+            }
+            return
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
 
     return (
         <ProductContainer>
             <Name>
                 {name}
                 <Icons>
-                    <GrEdit color = "grey" size = {18}/>
-                    <BsTrash color = "red" size = {18}/>
+                    <GrEdit color = "grey" size = {18} onClick = {() => alert("Atualização de produto ainda não está implementada")}/>
+                    <BsTrash color = "red" size = {18} onClick = {removeProduct}/>
                 </Icons>
             </Name>
             <Description>{description}</Description>
             <Box>
-                <Price>R$ {price}</Price>
+                <Price>R$ {priceFormated}</Price>
                 <Category>{category}</Category>
             </Box>
         </ProductContainer>
@@ -31,17 +52,25 @@ function Product({name, description, price, category}) {
 
 export default function Products() {
 
-    const products = [{name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"},
-    {name: "Anel pedra rosa", description: "Anel feito em prata 950 + pedra rosa", price: 30, category: "Anéis"}]
+    const [callApi, setCallApi] = useState(true)
+    const [productsData, setProductsData] = useState([])
+    const {config} = useContext(UserContext)
+
+    const readProducts = async () => {
+        try {
+            const result =  (await getProducts(config)).data
+            setProductsData(result)
+            
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
+    useEffect(async () => {
+        if (callApi) {
+            readProducts()
+            setCallApi(false)
+        }
+    }, [callApi])
 
     return (
         <Container>
@@ -55,8 +84,8 @@ export default function Products() {
                     </Registration>
                 </Link>
                 <List>
-                    {products.map((value, index) => <Product key = {index} name = {value.name} 
-                    description = {value.description} price = {value.price} category = {value.category}/>)}
+                    {productsData.map((value, index) => <Product key = {index} name = {value.name} productId = {value.id}
+                    description = {value.description} price = {value.price} category = {value.category} setCallApi = {setCallApi}/>)}
                 </List>
             </ListContainer>
         </Container>

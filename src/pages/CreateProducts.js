@@ -20,6 +20,10 @@ export default function CreateProducts() {
 
     async function sendProduct() {
 
+        const {price} = form
+        const priceFormated = price?.replace(",", ".")
+        form.price = priceFormated
+        
         try {
             await postProduct(form, config)
             alert(`Produto ${form.product} cadastrado com sucesso!`)
