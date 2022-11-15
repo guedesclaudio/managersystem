@@ -1,14 +1,16 @@
 import styled from "styled-components"
 import SideBar from "../components/SideBar"
 import BodyStyle from "./style"
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { handleForm } from "../helpers/handleForm"
 import { postCategory } from "../services/api"
+import { UserContext } from "../contexts/UserContext"
 
 export default function CreateCategory() {
 
     const [form, setForm] = useState({})
     const [cleanForm, setCleanForm] = useState(0)
+    const {config} = useContext(UserContext)
 
     function treatEvent(event) {
         event.preventDefault()
@@ -18,7 +20,7 @@ export default function CreateCategory() {
     async function sendCategory() {
 
         try {
-            await postCategory(form)
+            await postCategory(form, config)
             alert(`Categoria ${form.category} cadastrada com sucesso!`)
             
         } catch (error) {
