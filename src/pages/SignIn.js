@@ -28,12 +28,11 @@ export default function SignIn() {
     }
 
     async function sendLogin() {
-        console.log(form)
         try {
             const response = await postLogin(form)
             const {token, username} = response.data
             
-            localStorage.setItem("user", JSON.stringify({...form, token, username}))
+            localStorage.setItem("user", JSON.stringify({token, username}))
             setUserData({...userData, token, username})
             setConfig({...config, 
                 headers: {

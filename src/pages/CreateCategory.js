@@ -1,8 +1,30 @@
 import styled from "styled-components"
 import SideBar from "../components/SideBar"
 import BodyStyle from "./style"
+import { useState } from "react"
+import { handleForm } from "../helpers/handleForm"
+import { postCategory } from "../services/api"
 
 export default function CreateCategory() {
+
+    const [form, setForm] = useState({})
+    const [cleanForm, setCleanForm] = useState(0)
+
+    function treatEvent(event) {
+        event.preventDefault()
+        sendCategory()
+    }
+
+    async function sendCategory() {
+
+        try {
+            await postCategory(form)
+            alert(`Categoria ${form.category} cadastrada com sucesso!`)
+            
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
 
     return (
         <Container>
@@ -10,9 +32,10 @@ export default function CreateCategory() {
             <SideBar/>
             <CreateContainer>
                 <Box>
-                    <form>
+                    <form onSubmit = {treatEvent}>
                         <Inputs>
-                            <input type = "text" placeholder = "nome da categoria"/>
+                            <input type = "text" placeholder = "nome da categoria" name = "category"
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                         </Inputs>
                         <Button>
                             <button type = "submit">Cadastar</button>

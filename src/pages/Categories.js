@@ -3,18 +3,34 @@ import SideBar from "../components/SideBar"
 import BodyStyle from "./style"
 import { Link } from "react-router-dom"
 import { IoAddCircle } from "react-icons/io5"
+import { useContext, useEffect, useState } from "react"
+import { getCategories } from "../services/api"
+import { UserContext } from "../contexts/UserContext"
 
-function Category() {
+function Category({name}) {
 
     return (
         <CategoryContainer>
-            <Name>Anéis</Name>
-            <Total>Quantidade: <strong>55</strong></Total>
+            <Name>{name}</Name>
+            <Total>Quantidade: <strong>0</strong></Total>
         </CategoryContainer>
     )
 }
 
 export default function Categories() {
+
+    const [categoriesData, setCategoriesData] = useState([])
+    const {config} = useContext(UserContext)
+
+    useEffect(async () => {
+        try {
+            const result =  (await getCategories(config)).data
+            setCategoriesData(result)
+            
+        } catch (error) {
+            console.error(error)
+        }
+    }, [])
 
     return (
         <Container>
@@ -27,10 +43,8 @@ export default function Categories() {
                         <IoAddCircle color = "green" size = {20}/>
                     </Registration>
                 </Link>
-                <Category/>
-                <Category/>
-                <Category/>
-                <Category/>
+                {categoriesData.map((value, index) => <Category key = {index} 
+                name = {value.name} />)}
             </List>
         </Container>
     )
