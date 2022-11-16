@@ -1,6 +1,4 @@
 import styled from "styled-components"
-import SideBar from "../components/SideBar"
-import BodyStyle from "./style"
 import { BsTrash } from "react-icons/bs"
 import { GrEdit } from "react-icons/gr"
 import { IoAddCircle } from "react-icons/io5"
@@ -9,7 +7,8 @@ import { UserContext } from "../contexts/UserContext"
 import { useEffect, useState, useContext } from "react"
 import { getProducts, deleteProduct, getCategories } from "../services/api"
 import { handleForm } from "../helpers/handleForm"
-
+import Mold from "./Mold"
+import { Button, Select, Text } from "../styles/common.style"
 
 function Product({name, description, price, category, productId, setCallApi}) {
 
@@ -73,6 +72,7 @@ export default function Products() {
             alert(`Ocorreu um erro ${error}`)
         }
     }
+
     useEffect(async () => {
         if (callApi) {
             readProducts()
@@ -91,26 +91,24 @@ export default function Products() {
     }, [])
 
     return (
-        <Container>
-            <BodyStyle/>
-            <SideBar/>
+        <Mold>
             <ListContainer>
                 <Options>
                     <Link to = {"/register-product"}>
                         <Registration>
-                            <p>Cadastrar produto</p>
+                            <Text>Cadastrar produto</Text>
                             <IoAddCircle color = "green" size = {20}/>
                         </Registration>
                     </Link>
                      <Filter>
-                        <p>Filtar produtos</p>
+                        <Text>Filtar produtos</Text>
                         <form onSubmit={treatEvent}>
-                            <select name = "category" onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}>
+                            <Select name = "category" onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}>
                                 <option selected = "selected" value = {"all"} type = "submit">todos</option>
                                 {categoriesData.map((value, index) => <option key = {index} value = {value.id}>
                                 {value.name}</option>)}
-                            </select>
-                            <button type="submit">Filtrar</button>
+                            </Select>
+                            <Button type="submit">Filtrar</Button>
                         </form>
                     </Filter>
                 </Options>
@@ -119,15 +117,10 @@ export default function Products() {
                     description = {value.description} price = {value.price} category = {value.category} setCallApi = {setCallApi}/>)}
                 </List>
             </ListContainer>
-        </Container>
+        </Mold>
     )
 }
 
-const Container = styled.div`
-    display: flex;
-    justify-content: left;
-    margin-left: 400px;
-`
 const Registration = styled.div`
     margin: 60px 0;
     width: 12vw;
@@ -135,16 +128,6 @@ const Registration = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-
-    && p {
-        font-family: 'Roboto', sans-serif;
-        font-size: 24px;
-        color: grey;
-    }
-
-    && p:hover {
-        filter: brightness(1.5);
-    }
 `
 const ListContainer = styled.div`
     width: 100vw;
@@ -160,45 +143,9 @@ const Options = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    && p {
-        font-family: 'Roboto', sans-serif;
-        font-size: 24px;
-        color: grey;
-    }
 `
 const Filter = styled(Options)`
     width: 54%;
-
-    && button {
-        margin-left: 10px;
-        width: 150px;
-        height: 40px;
-        border-radius: 6px;
-        border: none;
-        background-color: #ADD8E6;
-        font-family: 'Roboto', sans-serif;
-        font-size: 16px;
-        color: grey;
-        cursor: pointer;
-    }
-
-    && button:hover {
-        filter: brightness(0.8);
-    }
-
-    && select {
-        width: 150px;
-        height: 40px;
-        font-family: 'Roboto', sans-serif;
-        font-size: 16px;
-        color: grey;
-        outline: none;
-        padding-left: 10px;
-        background-color: #ADD8E6;
-        border: none;
-        border-radius: 6px;
-    }
 `
 const List = styled.div`
     width: 50vw;

@@ -1,10 +1,9 @@
 import styled from "styled-components"
-import SideBar from "../components/SideBar"
-import BodyStyle from "./style"
 import { BsTrash } from "react-icons/bs"
 import { GrEdit } from "react-icons/gr"
 import { IoAddCircle } from "react-icons/io5"
 import { Link } from "react-router-dom"
+import Mold from "./Mold"
 
 
 function Client({name, email, cpf, date, phone, address}) {
@@ -75,9 +74,7 @@ export default function Clients() {
     ]
 
     return (
-        <Container>
-            <BodyStyle/>
-            <SideBar/>
+        <Mold>
             <List>
                 <Link to = {"/register-client"}>
                     <Registration>
@@ -88,15 +85,10 @@ export default function Clients() {
                 {clients.map((value, index) => <Client key = {index} name = {value.name} email = {value.email} 
                 cpf = {value.cpf} date = {value.date} phone = {value.phone} address = {value.address}/>)}
             </List>
-        </Container>
+        </Mold>
     )
 }
 
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-left: 400px;
-`
 const Registration = styled.div`
     margin: 60px 0;
     width: 12vw;

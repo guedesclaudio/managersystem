@@ -1,11 +1,10 @@
 import styled from "styled-components"
-import SideBar from "../components/SideBar"
-import BodyStyle from "./style"
 import { BsTrash } from "react-icons/bs"
 import { GrEdit } from "react-icons/gr"
 import { IoAddCircle } from "react-icons/io5"
 import { Link } from "react-router-dom"
-
+import Mold from "./Mold"
+import { Text } from "../styles/common.style"
 
 function Order({name, email, cpf, date, phone, address}) {
 
@@ -17,34 +16,32 @@ function Order({name, email, cpf, date, phone, address}) {
                 <Email>{email}</Email>
                 <ListProducts>
                     <Product>
-                        <p>Anel pedra rosa</p>
-                        <p>Quantidade: <strong>1</strong></p>
+                        <Text>Anel pedra rosa</Text>
+                        <Text>Quantidade: <strong>1</strong></Text>
                     </Product>
                     <Product>
-                        <p>Anel pedra lua</p>
-                        <p>Quantidade: <strong>2</strong></p>
+                        <Text>Anel pedra lua</Text>
+                        <Text>Quantidade: <strong>2</strong></Text>
                     </Product>
                     <Product>
-                        <p>Anel pedra lua</p>
-                        <p>Quantidade: <strong>2</strong></p>
+                        <Text>Anel pedra lua</Text>
+                        <Text>Quantidade: <strong>2</strong></Text>
                     </Product>
                     <Product>
-                        <p>Anel pedra lua</p>
-                        <p>Quantidade: <strong>2</strong></p>
+                        <Text>Anel pedra lua</Text>
+                        <Text>Quantidade: <strong>2</strong></Text>
                     </Product>
                 </ListProducts>
             </Box>
             <Address>
-                <p>{address.street}</p>
-                <p>{address.number}</p>
-                <p>{address.city}</p>
-                <p>{address.state}</p>
-                <p>{address.cep}</p>
+                <Text>{address.street}</Text>
+                <Text>{address.number}</Text>
+                <Text>{address.city}</Text>
+                <Text>{address.state}</Text>
+                <Text>{address.cep}</Text>
             </Address>
             <Total>
-                <p>
-                    Total: R$ <strong>227,00</strong>
-                </p>
+                <Text>Total: R$ <strong>227,00</strong></Text>
             </Total>
             <Icons>
                 <GrEdit color = "grey" size = {18}/>
@@ -74,28 +71,21 @@ export default function Orders() {
     ]
 
     return (
-        <Container>
-            <BodyStyle/>
-            <SideBar/>
+        <Mold>
             <List>
                 <Link to = {"/register-order"}>
                     <Registration>
-                        <p>Cadastrar pedido</p>
+                        <Text>Cadastrar pedido</Text>
                         <IoAddCircle color = "green" size = {20}/>
                     </Registration>
                 </Link>
                 {orders.map((value, index) => <Order key = {index} name = {value.name} email = {value.email} 
                 cpf = {value.cpf} date = {value.date} phone = {value.phone} address = {value.address}/>)}
             </List>
-        </Container>
+        </Mold>
     )
 }
 
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-left: 400px;
-`
 const Registration = styled.div`
     margin: 60px 0;
     width: 12vw;
@@ -103,16 +93,6 @@ const Registration = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-
-    && p {
-        font-family: 'Roboto', sans-serif;
-        font-size: 24px;
-        color: grey;
-    }
-
-    && p:hover {
-        filter: brightness(1.5);
-    }
 `
 const List = styled.div`
     display: flex;
@@ -145,11 +125,8 @@ const Product = styled.div`
     justify-content: space-between;
     margin-bottom: 10px;
     
-
     && p {
-        font-family: 'Roboto', sans-serif;
         font-size: 16px;
-        color: grey;
     }
 `
 const ListProducts = styled.div`
@@ -163,9 +140,7 @@ const Address = styled.div`
     width: 35%;
 
     && p {
-        font-family: 'Roboto', sans-serif;
         font-size: 16px;
-        color: grey;
         margin-bottom: 10px;
     }
 `
@@ -181,8 +156,6 @@ const Total = styled.div`
     justify-content: space-between;
 
     && p {
-        font-family: 'Roboto', sans-serif;
         font-size: 16px;
-        color: green;
     }
 `

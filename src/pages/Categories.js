@@ -1,6 +1,4 @@
 import styled from "styled-components"
-import SideBar from "../components/SideBar"
-import BodyStyle from "./style"
 import { Link } from "react-router-dom"
 import { IoAddCircle } from "react-icons/io5"
 import { useContext, useEffect, useState } from "react"
@@ -8,6 +6,7 @@ import { deleteCategory, getCategories } from "../services/api"
 import { UserContext } from "../contexts/UserContext"
 import { GrEdit } from "react-icons/gr"
 import { BsTrash } from "react-icons/bs"
+import Mold from "./Mold"
 
 function Category({name, numberProducts, categoryId, setCallApi}) {
 
@@ -65,9 +64,7 @@ export default function Categories() {
     }, [callApi])
 
     return (
-        <Container>
-            <BodyStyle/>
-            <SideBar/>
+        <Mold>
             <List>
                 <Link to = {"/register-category"}>
                     <Registration>
@@ -78,15 +75,10 @@ export default function Categories() {
                 {categoriesData.map((value, index) => <Category key = {index} categoryId = {value.id}
                 name = {value.name} numberProducts = {value.number_products} setCallApi = {setCallApi}/>)}
             </List>
-        </Container>
+        </Mold>
     )
 }
 
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-left: 400px;
-`
 const List = styled.div`
     margin-top: 0px;
 `
