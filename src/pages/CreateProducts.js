@@ -27,10 +27,15 @@ export default function CreateProducts() {
         try {
             await postProduct(form, config)
             alert(`Produto ${form.product} cadastrado com sucesso!`)
-            
+            clearInput()
+
         } catch (error) {
             alert(`Ocorreu um erro ${error}`)
         }
+    }
+
+    function clearInput() {
+        setForm({})
     }
 
     useEffect(async () => {
@@ -49,15 +54,16 @@ export default function CreateProducts() {
                 <Box>
                     <form onSubmit = {treatEvent}>
                         <Inputs>
-                            <Input type = "text" placeholder = "nome do produto" name = "product"
+                            <Input type = "text" placeholder = "nome do produto" name = "product" value = {form.product ? form.product : ""}
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
-                            <Input type = "text" placeholder = "descrição do produto" className = "description" name = "description"
+                            <Input type = "text" placeholder = "descrição do produto" className = "description" name = "description" 
+                            value = {form.description ? form.description : ""}
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                         </Inputs>
                         <Inputs>
-                            <Input type = "text" placeholder = "preço do produto" name = "price"
+                            <Input type = "text" placeholder = "preço do produto" name = "price" value = {form.price ? form.price : ""}
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
-                            <Select name = "category" onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}>
+                            <Select name = "category" onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}> 
                                 <option selected = "selected" value = {null}>categorias</option>
                                 {categoriesData.map((value, index) => <option key = {index} value = {value.id}>{value.name}</option>)}
                             </Select>
@@ -75,7 +81,7 @@ export default function CreateProducts() {
 
 const Box = styled.div`
     width: 50vw;    
-    height: 300px;
+    height: 210px;
     border: 1px solid #ADD8E6;
     border-radius: 6px;
     margin-top: 100px;

@@ -18,14 +18,17 @@ export default function CreateCategory() {
     }
 
     async function sendCategory() {
-
         try {
             await postCategory(form, config)
             alert(`Categoria ${form.category} cadastrada com sucesso!`)
-            
+            clearInput()
         } catch (error) {
             alert(`Ocorreu um erro ${error}`)
         }
+    }
+
+    function clearInput() {
+        setForm({category: ""})
     }
 
     return (
@@ -34,7 +37,7 @@ export default function CreateCategory() {
                 <Box>
                     <form onSubmit = {treatEvent}>
                         <Inputs>
-                            <Input type = "text" placeholder = "nome da categoria" name = "category"
+                            <Input type = "text" placeholder = "nome da categoria" name = "category" value = {form.category ? form.category : ""}
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                         </Inputs>
                         <ButtonBox>
