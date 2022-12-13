@@ -1,14 +1,42 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import styled from "styled-components"
 import Mold from "./Mold"
 import ButtonBox from "../components/ButtonBox"
 import { Select, Input, CreateContainer, Inputs } from "../styles/common.style"
+import { postClient } from "../services/api"
+import { handleForm } from "../helpers/handleForm"
+import { UserContext } from "../contexts/UserContext"
+
+
 
 export default function CreateClient() {
 
-    const urlStates = "http://www.geonames.org/childrenJSON?geonameId=3469034"
     const [states, setStates] = useState([])
+    const [form, setForm] = useState({})
+    const {config} = useContext(UserContext)
+
+    function treatEvent(event) {
+        event.preventDefault()
+        console.log(form)
+        sendClient()
+    }
+
+    async function sendClient() {
+        form.stateId = 2
+        try {
+            await postClient(form, config)
+            alert(`Client ${form.name} cadastrado com sucesso!`)
+            clearInput()
+
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
+
+    function clearInput() {
+        setForm({})
+    }
 
     useEffect(async () => {
         const promise = (await axios.get("http://www.geonames.org/childrenJSON?geonameId=3469034")).data.geonames
@@ -19,24 +47,36 @@ export default function CreateClient() {
         <Mold>
             <CreateContainer>
                 <Box>
-                    <form>
+                    <form onSubmit={treatEvent}>
                         <Inputs>
-                            <Input type = "text" placeholder = "nome do cliente"/>
-                            <Input type = "email" placeholder = "email do cliente"/>
-                            <Input type = "text" placeholder = "cpf do cliente"/>
+                            <Input type = "text" placeholder = "nome do cliente" name = "name" value = {form.name ? form.name : ""}
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Input type = "email" placeholder = "email do cliente" name = "email" value = {form.email ? form.email : ""}
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Input type = "text" placeholder = "cpf do cliente" name = "cpf" value = {form.cpf ? form.cpf : ""}
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                         </Inputs>
                         <Inputs>
-                            <Input type = "date"/>
-                            <Input type = "text" placeholder = "telefone"/>
+                            <Input type = "date" name = "birthday" 
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Input type = "text" placeholder = "telefone" name = "phone" value = {form.phone ? form.phone : ""} 
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                         </Inputs>
                         <Inputs>
-                            <Input type = "text" placeholder = "nome da rua"/>
-                            <Input type = "text" placeholder = "número"/>
+                            <Input type = "text" placeholder = "nome da rua" name = "streetName" value = {form.streetName ? form.streetName : ""} 
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Input type = "text" placeholder = "número" name = "houseNumber" value = {form.numberHouse ? form.numberHouse : ""} 
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Input type = "text" placeholder = "bairro" name = "districtName" value = {form.districtName ? form.districtName : ""} 
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                         </Inputs>
                         <Inputs>
-                            <Input type = "text" placeholder = "cidade"/>
-                            <Input type = "text" placeholder = "cep"/>
-                            <Select>
+                            <Input type = "text" placeholder = "cidade" name = "cityName" value = {form.cityName ? form.cityName : ""}
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Input type = "text" placeholder = "cep" name = "cep" value = {form.cep ? form.cep : ""} 
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Select name = "stateId" onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}>
+                                <option selected = "selected" value = {null}>estados</option>
                                 {states.map((value, index) => <option>{value.name}</option>)}
                             </Select>
                         </Inputs>

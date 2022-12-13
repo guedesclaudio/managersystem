@@ -11,6 +11,7 @@ function postCategory(data, config) {
 }
 
 function getCategories(config) {
+    console.log(config)
     return axios.get(`${baseUrl}/categories`, config)
 }
 
@@ -19,7 +20,6 @@ function postProduct(data, config) {
 }
 
 function getProducts(data = "all", config) {
-    console.log(data)
     return axios.get(`${baseUrl}/products?filter=${data}`, config)
 }
 
@@ -31,6 +31,10 @@ function deleteCategory(data, config) {
     return axios.delete(`${baseUrl}/categories/${data}`, config)
 }
 
+function postClient(data, config) {
+    return axios.post(`${baseUrl}/customers`, data, config)
+}
+
 export {
     postLogin, 
     postCategory, 
@@ -38,5 +42,6 @@ export {
     postProduct, 
     getProducts, 
     deleteProduct,
-    deleteCategory
+    deleteCategory,
+    postClient
 }

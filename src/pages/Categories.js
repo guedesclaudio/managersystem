@@ -52,6 +52,7 @@ export default function Categories() {
             setCategoriesData(result)
             
         } catch (error) {
+            console.log(error)
             alert(`Ocorreu um erro ${error}`)
         }
     }
