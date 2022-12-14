@@ -4,9 +4,30 @@ import { GrEdit } from "react-icons/gr"
 import { IoAddCircle } from "react-icons/io5"
 import { Link } from "react-router-dom"
 import Mold from "./Mold"
+import { useEffect, useState, useContext } from "react"
+import { UserContext } from "../contexts/UserContext"
+import { getClients, deleteClient } from "../services/api"
 
+function Client({
+    name, email, cpf, date, phone,
+    stateName, houseNumber, cityName, cep, 
+    streetName, clientId, config, setCallApi
+    }) {
 
-function Client({name, email, cpf, date, phone, address}) {
+    async function removeClient() {
+        const deleteConfirm = window.confirm(`Tem certeza que deseja excluir ${name}?`)
+        
+        try {
+            if (deleteConfirm === true) {
+                await deleteClient(clientId, config) 
+                alert(`Cliente ${name} deletado com sucesso!`)
+                setCallApi(true)
+            }
+            return
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
 
 
     return (
@@ -19,15 +40,15 @@ function Client({name, email, cpf, date, phone, address}) {
                 <Phone>{phone}</Phone>
             </Box>
             <Address>
-                <p>{address.street}</p>
-                <p>{address.number}</p>
-                <p>{address.city}</p>
-                <p>{address.state}</p>
-                <p>{address.cep}</p>
+                <p>{streetName}</p>
+                <p>{houseNumber}</p>
+                <p>{cityName}</p>
+                <p>{stateName}</p>
+                <p>{cep}</p>
             </Address>
             <Icons>
-                <GrEdit color = "grey" size = {18}/>
-                <BsTrash color = "red" size = {18}/>
+                <GrEdit color = "grey" size = {18} onClick = {() => alert("Atualização de cliente ainda não está implementada")}/>
+                <BsTrash color = "red" size = {18} onClick = {removeClient}/>
             </Icons>
             
         </ClientContainer>
@@ -37,41 +58,26 @@ function Client({name, email, cpf, date, phone, address}) {
 
 export default function Clients() {
 
-    const clients = [
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }}
-    ]
+    const [clients, setClients] = useState([])
+    const {config} = useContext(UserContext)
+    const [callApi, setCallApi] = useState(true)
+
+    const readClients = async () => {
+        try {
+            const result = (await getClients(config)).data
+            setClients(result)
+            
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
+    
+    useEffect(async () => {
+        if (callApi) {
+            readClients()
+            setCallApi(false)
+        }
+    }, [callApi])
 
     return (
         <Mold>
@@ -83,7 +89,9 @@ export default function Clients() {
                     </Registration>
                 </Link>
                 {clients.map((value, index) => <Client key = {index} name = {value.name} email = {value.email} 
-                cpf = {value.cpf} date = {value.date} phone = {value.phone} address = {value.address}/>)}
+                cpf = {value.cpf} date = {value.date} phone = {value.phone} cep = {value.CEP} cityName = {value.cityName} 
+                stateName = {value.stateName} houseNumber = {value.houseNumber} streetName = {value.streetName} 
+                clientId = {value.id} config = {config} setCallApi = {setCallApi}/>)}
             </List>
         </Mold>
     )

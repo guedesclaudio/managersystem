@@ -11,7 +11,6 @@ function postCategory(data, config) {
 }
 
 function getCategories(config) {
-    console.log(config)
     return axios.get(`${baseUrl}/categories`, config)
 }
 
@@ -35,6 +34,18 @@ function postClient(data, config) {
     return axios.post(`${baseUrl}/customers`, data, config)
 }
 
+function getClients(config) {
+    return axios.get(`${baseUrl}/customers`, config)
+}
+
+async function getStates(config) {
+    return axios.get(`${baseUrl}/states`, config)
+}
+
+function deleteClient(data, config) {
+    return axios.delete(`${baseUrl}/customers/${data}`, config)
+}
+
 export {
     postLogin, 
     postCategory, 
@@ -43,5 +54,8 @@ export {
     getProducts, 
     deleteProduct,
     deleteCategory,
-    postClient
+    postClient,
+    getClients,
+    getStates,
+    deleteClient
 }

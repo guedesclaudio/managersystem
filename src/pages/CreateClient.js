@@ -4,10 +4,9 @@ import styled from "styled-components"
 import Mold from "./Mold"
 import ButtonBox from "../components/ButtonBox"
 import { Select, Input, CreateContainer, Inputs } from "../styles/common.style"
-import { postClient } from "../services/api"
+import { getStates, postClient } from "../services/api"
 import { handleForm } from "../helpers/handleForm"
 import { UserContext } from "../contexts/UserContext"
-
 
 
 export default function CreateClient() {
@@ -23,7 +22,6 @@ export default function CreateClient() {
     }
 
     async function sendClient() {
-        form.stateId = 2
         try {
             await postClient(form, config)
             alert(`Client ${form.name} cadastrado com sucesso!`)
@@ -39,8 +37,13 @@ export default function CreateClient() {
     }
 
     useEffect(async () => {
-        const promise = (await axios.get("http://www.geonames.org/childrenJSON?geonameId=3469034")).data.geonames
-        setStates(promise)
+        try {
+            const result = (await getStates(config)).data
+            setStates(result)
+            
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
     }, [])
 
     return (
@@ -61,11 +64,13 @@ export default function CreateClient() {
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                             <Input type = "text" placeholder = "telefone" name = "phone" value = {form.phone ? form.phone : ""} 
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
+                            <Input type = "text" placeholder = "complemento" name = "complement" value = {form.complement ? form.complement : ""} 
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                         </Inputs>
                         <Inputs>
                             <Input type = "text" placeholder = "nome da rua" name = "streetName" value = {form.streetName ? form.streetName : ""} 
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
-                            <Input type = "text" placeholder = "número" name = "houseNumber" value = {form.numberHouse ? form.numberHouse : ""} 
+                            <Input type = "text" placeholder = "número" name = "houseNumber" value = {form.houseNumber ? form.houseNumber : ""} 
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                             <Input type = "text" placeholder = "bairro" name = "districtName" value = {form.districtName ? form.districtName : ""} 
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
@@ -77,7 +82,7 @@ export default function CreateClient() {
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                             <Select name = "stateId" onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}>
                                 <option selected = "selected" value = {null}>estados</option>
-                                {states.map((value, index) => <option>{value.name}</option>)}
+                                {states.map((value, index) => <option key = {index} value = {value.id}>{value.name}</option>)}
                             </Select>
                         </Inputs>
                         <ButtonBox>
@@ -93,7 +98,7 @@ export default function CreateClient() {
 
 const Box = styled.div`
     width: 54vw;    
-    height: 440px;
+    height: 340px;
     border: 1px solid #ADD8E6;
     border-radius: 6px;
     margin-top: 100px;

@@ -65,7 +65,7 @@ export default function Products() {
 
     const readProducts = async (form) => {
         try {
-            const result =  (await getProducts(form?.category, config)).data
+            const result = (await getProducts(form?.category, config)).data
             setProductsData(result)
             
         } catch (error) {
