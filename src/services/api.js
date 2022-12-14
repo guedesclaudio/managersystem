@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseUrl = "http://localhost:4000"
+const baseUrl = "https://managersystem-backend.vercel.app/"
 
 function postLogin(data) {
     return axios.post(`${baseUrl}/signin`, data)
@@ -46,6 +46,10 @@ function deleteClient(data, config) {
     return axios.delete(`${baseUrl}/customers/${data}`, config)
 }
 
+function postOrder(data, config) {
+    return axios.post(`${baseUrl}/orders`, data, config)
+}
+
 export {
     postLogin, 
     postCategory, 
@@ -57,5 +61,6 @@ export {
     postClient,
     getClients,
     getStates,
-    deleteClient
+    deleteClient,
+    postOrder
 }

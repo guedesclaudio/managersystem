@@ -82,7 +82,7 @@ export default function Products() {
 
     useEffect(async () => {
         try {
-            const result =  (await getCategories(config)).data
+            const result = (await getCategories(config)).data
             setCategoriesData(result)
             
         } catch (error) {

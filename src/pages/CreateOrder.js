@@ -2,28 +2,66 @@ import styled from "styled-components"
 import ButtonBox from "../components/ButtonBox"
 import Mold from "./Mold"
 import { Select, Input, Button, CreateContainer } from "../styles/common.style"
+import { useEffect, useState, useContext } from "react"
+import { getCategories, postOrder } from "../services/api"
+import { UserContext } from "../contexts/UserContext"
+import { handleForm } from "../helpers/handleForm"
 
 
 export default function CreateOrder() {
+
+    const [categoriesData, setCategoriesData] = useState([])
+    const {config} = useContext(UserContext)
+    const [form, setForm] = useState({})
+
+    useEffect(async () => {
+        try {
+            const result = (await getCategories(config)).data
+            setCategoriesData(result)
+            
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }, [])
+
+    function treatEvent(event) {
+        event.preventDefault()
+        console.log(form)
+        sendOrder()
+    }
+
+    async function sendOrder() {
+        try {
+            await postOrder(form, config)
+            alert(`Pedido efetuado com sucesso!`)
+            clearInput()
+
+        } catch (error) {
+            alert(`Ocorreu um erro ${error}`)
+        }
+    }
+
+    function clearInput() {
+        setForm({})
+    }
 
     return (
         <Mold>
             <CreateContainer>
                 <Box>
-                    <form>
+                    <form onSubmit={treatEvent}>
                         <Inputs className = "first">
-                            <Select className = "clients">
-                                <option selected>cliente</option>
-                                <option>Maria Clara Costa Vaz</option>
-                            </Select>
+                            <Input type = "text" placeholder = "nome do cliente" name = "name" value = {form.name ? form.name : ""}
+                            onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                             <Total>
                                 Total: R$ <strong>35,00</strong>
                             </Total>
                         </Inputs>
                         <Inputs>
                             <Select>
-                                <option selected>categoria</option>
-                                <option>Aneis</option>
+                                <option selected = "selected" value = {null} type = "submit">categorias</option>
+                                {categoriesData.map((value, index) => <option key = {index} value = {value.id}>
+                                {value.name}</option>)}
                             </Select>
                             <Select>
                                 <option selected>produto</option>
@@ -41,6 +79,7 @@ export default function CreateOrder() {
                             </Select>
                         </Inputs>
                         <List>
+                            <p><strong>1</strong> Anel pedra rosa</p>
                             <p><strong>1</strong> Anel pedra rosa</p>
                             <p><strong>1</strong> Anel pedra rosa</p>
                             <p><strong>1</strong> Anel pedra rosa</p>
