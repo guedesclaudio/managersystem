@@ -55,20 +55,7 @@ function Order({name, email, cpf, date, phone, address}) {
 
 export default function Orders() {
 
-    const orders = [
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }},
-        {name: "Maria Clara Costa Vaz", email: "cvazmariaclara@gmail.com", cpf: "12345678900", date: "25/05/1989", phone: "21999570191", address: {
-            street: "Rua Doutor Waldir Costa", number: "841", city: "Niterói", state: "Rio de Janeiro", cep: "24358190"
-        }}
-    ]
+    const orders = []
 
     return (
         <Mold>

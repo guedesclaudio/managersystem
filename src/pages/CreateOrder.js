@@ -54,7 +54,7 @@ export default function CreateOrder() {
                             <Input type = "text" placeholder = "nome do cliente" name = "name" value = {form.name ? form.name : ""}
                             onChange = {event => handleForm({name: event.target.name, value: event.target.value}, form, setForm)}/>
                             <Total>
-                                Total: R$ <strong>35,00</strong>
+                                Total: R$ <strong>0,00</strong>
                             </Total>
                         </Inputs>
                         <Inputs>
@@ -64,8 +64,7 @@ export default function CreateOrder() {
                                 {value.name}</option>)}
                             </Select>
                             <Select>
-                                <option selected>produto</option>
-                                <option>Anel pedra rosa</option>
+                                <option selected>produtos</option>
                             </Select>
                             <Input type = "number" placeholder = "quantidade" className = "quantidade" min = "1"/>
                             <Button>Adicionar produto</Button>
@@ -79,12 +78,7 @@ export default function CreateOrder() {
                             </Select>
                         </Inputs>
                         <List>
-                            <p><strong>1</strong> Anel pedra rosa</p>
-                            <p><strong>1</strong> Anel pedra rosa</p>
-                            <p><strong>1</strong> Anel pedra rosa</p>
-                            <p><strong>1</strong> Anel pedra rosa</p>
-                            <p><strong>1</strong> Anel pedra rosa</p>
-                            <p><strong>1</strong> Anel pedra rosa</p>
+                            <p></p>
                         </List>
                         <ButtonBox>
                             <button type = "submit">Cadastar</button>
