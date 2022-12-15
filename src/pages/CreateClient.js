@@ -21,6 +21,11 @@ export default function CreateClient() {
     }
 
     async function sendClient() {
+        const complementIsVoid = form.complement === ""
+        
+        if (complementIsVoid) {
+            form.complement = null
+        }
         try {
             await postClient(form, config)
             alert(`Client ${form.name} cadastrado com sucesso!`)
