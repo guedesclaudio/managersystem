@@ -1,6 +1,7 @@
 import axios from "axios"
 
-const baseUrl = "https://managersystem-backend.vercel.app"
+//const baseUrl = "https://managersystem-backend.vercel.app"
+//const baseUrl = "http://localhost:4000"
 
 function postLogin(data) {
     return axios.post(`${baseUrl}/signin`, data)
